@@ -1,0 +1,181 @@
+CREATE TABLE celebs (id INTEGER, name TEXT, age INTEGER);
+
+insert into celebs (
+	id, name, age) values (1, 'Justin Biber', 21);
+	
+select * from celebs;
+
+INSERT INTO celebs (id, name, age) VALUES (2, 'Beyonce Knowles', 33); 
+
+INSERT INTO celebs (id, name, age) VALUES (3, 'Jeremy Lin', 26); 
+
+INSERT INTO celebs (id, name, age) VALUES (4, 'Taylor Swift', 26);
+
+select name from celebs;
+
+UPDATE celebs 
+SET age = 22 
+WHERE id = 1; 
+
+ALTER TABLE celebs ADD COLUMN twitter_handle TEXT; 
+
+UPDATE celebs 
+SET twitter_handle = '@taylorswift13' 
+WHERE id = 4; 
+
+DELETE FROM celebs WHERE twitter_handle IS NULL; %this will delete all but id = 4
+
+%============PROJECT
+
+create table friends (
+	id INTEGER,
+	name TEXT,
+	birthday TEXT); 
+  
+insert into friends(id, name, birthday)  values (
+	1, "Jane Doe", "May 19th, 1993");
+insert into friends (id, name, birthday)  values (
+	2, "Jane Dfoe", "May 19th, 1993");
+  
+insert into friends (id, name, birthday)  values (
+	3, "Jane Dose", "May 19th, 1993");
+  
+insert into friends (id, name, birthday) values (
+	4, "Jane Dode", "May 19th, 1993");
+  
+update friends 
+set name = "Jane Smith"
+where name ="Jane Doe";
+
+alter table friends ADD COLUMN email;
+
+update friends
+set email = "jdoe@example.com"
+where name = "Jane Smith";
+
+DELETE from friends where name = "Jane Smith";
+
+SELECT * FROM friends;
+
+%=========part 2
+SELECT name, imdb_rating FROM movies;
+
+SELECT DISTINCT genre FROM movies;
+
+SELECT * FROM movies WHERE imdb_rating > 8;
+
+SELECT * FROM movies
+WHERE name LIKE 'Se_en';
+
+SELECT * FROM movies
+WHERE name LIKE 'a%';
+
+
+
+SELECT * FROM movies
+WHERE name BETWEEN 'A' AND 'J';
+
+SELECT * FROM movies
+WHERE year BETWEEN 1990 AND 2000
+AND genre = 'comedy';
+
+SELECT * FROM movies
+WHERE genre = 'comedy'
+OR year < 1980;
+
+SELECT * FROM movies
+ORDER BY imdb_rating DESC;
+
+SELECT * FROM movies
+ORDER BY imdb_rating ASC
+LIMIT 3;
+
+
+%================project2
+
+select distinct year from movies;
+
+select * from movies
+where genre = 'dramas';
+
+
+select * from movies
+where year = 1995
+and imdb_rating = 9 ;
+
+
+
+%========== agregate functions
+
+SELECT COUNT(*) FROM fake_apps;
+
+SELECT COUNT(*) FROM fake_apps
+WHERE price = 0;
+
+SELECT price, COUNT(*) FROM fake_apps
+GROUP BY price; 
+
+%GROUP BY is a clause in SQL that is only used 
+with aggregate functions. It is used in collaboration with 
+the SELECT statement to arrange identical data into groups.
+
+
+SELECT price, COUNT(*) FROM fake_apps
+WHERE downloads > 20000
+GROUP BY price;
+
+SELECT SUM(downloads) FROM fake_apps;
+
+SELECT category, SUM(downloads) FROM fake_apps
+GROUP BY category;
+
+SELECT MAX(downloads) FROM fake_apps;
+
+SELECT name, category, MAX(downloads) FROM fake_apps
+GROUP BY category;
+
+SELECT MIN(downloads) FROM fake_apps;
+
+SELECT AVG(downloads) FROM fake_apps;
+
+SELECT price, AVG(downloads) FROM fake_apps
+GROUP BY price;
+
+SELECT price, ROUND(AVG(downloads), 2) FROM fake_apps
+GROUP BY price;
+
+ELECT price, ROUND(AVG(downloads)) FROM fake_apps
+GROUP BY price;
+
+%=======================
+
+CREATE TABLE artists(id INTEGER PRIMARY KEY, name TEXT);
+
+SELECT albums.name, albums.year, artists.name FROM albums, artists;
+
+SELECT
+  *
+FROM
+  albums
+JOIN artists ON
+  albums.artist_id = artists.id;
+  
+SELECT
+  *
+FROM
+  albums
+LEFT JOIN artists ON
+  albums.artist_id = artists.id; %left join, every row in the left table is returned
+
+SELECT
+  albums.name AS 'Album',
+  albums.year,
+  artists.name AS 'Artist'
+FROM
+  albums
+JOIN artists ON
+  albums.artist_id = artists.id
+WHERE
+  albums.year > 1980;
+  
+  
