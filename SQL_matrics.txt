@@ -91,5 +91,5 @@ select
 from gameplays
 group by 1,2
 order by 1,2;
-
+#you can group two columns.
 
