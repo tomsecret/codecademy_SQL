@@ -1,0 +1,87 @@
+select * from flights
+limit 10;
+
+# ==== non-correlated subquery
+SELECT * 
+FROM flights 
+WHERE origin in (
+    SELECT code 
+    FROM airports 
+    WHERE elevation < 2000);
+    
+SELECT * 
+FROM flights 
+WHERE origin in (
+    SELECT code 
+    FROM airports 
+    WHERE faa_region = 'ASO');
+    
+    
+#we can calculate everything in one step using a subquery
+SELECT a.dep_month,
+       a.dep_day_of_week,
+       AVG(flight_distance) AS average_flights
+  FROM (
+        SELECT dep_month,
+              dep_day_of_week,
+               dep_date,
+               sum(distance) AS flight_distance
+          FROM flights
+         GROUP BY 1,2,3
+       ) a
+ GROUP BY 1,2
+ ORDER BY 1,2;
+ 
+ 
+ #=======correlated subquery
+
+SELECT id
+FROM flights AS f
+WHERE distance < (
+ SELECT AVG(distance)
+ FROM flights
+ WHERE carrier = f.carrier); 
+
+SELECT origin, id,
+    (SELECT COUNT(*)
+FROM flights f
+WHERE f.id < flights.id
+AND f.origin=flights.origin) + 1
+ AS flight_sequence_number
+FROM flights;
+
+#=====Union clause Merge the columns, called a union.
+
+SELECT brand FROM legacy_products
+UNION 
+SELECT brand FROM new_products;
+
+SELECT id, avg(a.sale_price) FROM (
+  SELECT id, sale_price FROM order_items
+  UNION ALL
+  SELECT id, sale_price FROM order_items_historic) AS a 
+  GROUP BY 1;
+
+ #====== INTERSECT is used to combine two SELECT statements, but returns row
+ #s only from the first SELECT s
+ #tatement that are identical to a row in the second SELECT statement. 
+
+SELECT category FROM new_products
+
+INTERSECT
+
+SELECT category FROM legacy_products;
+
+# ==== except
+
+SELECT category FROM legacy_products
+
+EXCEPT
+
+SELECT category FROM new_products;
+
+# Summary
+The UNION clause allows us to utilize information from multiple tables in our queries.
+The UNION ALL clause allows us to utilize information from multiple tables in our queries, including duplicate values.
+INTERSECT is used to combine two SELECT statements, but returns rows only from the first SELECT statement that are identical to a row in the second SELECT statement.
+EXCEPT returns distinct rows from the first SELECT statement that aren’t output by the second SELECT statement
