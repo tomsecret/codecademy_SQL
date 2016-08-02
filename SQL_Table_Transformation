@@ -85,3 +85,30 @@ The UNION clause allows us to utilize information from multiple tables in our qu
 The UNION ALL clause allows us to utilize information from multiple tables in our queries, including duplicate values.
 INTERSECT is used to combine two SELECT statements, but returns rows only from the first SELECT statement that are identical to a row in the second SELECT statement.
 EXCEPT returns distinct rows from the first SELECT statement that aren’t output by the second SELECT statement
+
+
+#==========conditional aggregates
+select count(id) from flights;
+
+select count(id) from flights
+where arr_time is not null 
+and destination is 'ATL';
+
+#===== case statement 
+SELECT
+    CASE
+        WHEN elevation < 500 THEN 'Low'
+        WHEN elevation BETWEEN 500 AND 1999 THEN 'Medium'
+        WHEN elevation >= 2000 THEN 'High'
+        ELSE 'Unknown'
+    END AS elevation_tier
+    , COUNT(*)
+FROM airports
+GROUP BY 1;
+
+SELECT    state, 
+    COUNT(CASE WHEN elevation < 1000 THEN 1 ELSE NULL END) as count_low_elevation_aiports 
+FROM airports 
+GROUP BY state;
+
+
